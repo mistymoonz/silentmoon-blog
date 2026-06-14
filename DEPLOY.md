@@ -1,98 +1,180 @@
 # 宝塔面板部署指南
 
-## 1. 本地构建
+## 准备工作
+
+先在本地 push 最新代码到 GitHub：
 
 ```bash
 cd "e:\Program Develop\silentmoon\New silentmoon"
-hugo --minify
+git add -A && git commit -m "update" && git push
 ```
 
-产物在 `public/` 目录，压缩成一个 zip：
+---
 
-```bash
-# PowerShell
+## 方案 A：本地构建上传（最简单）
+
+不用在服务器装任何东西。
+
+### 1. 本地构建
+
+```powershell
+cd "e:\Program Develop\silentmoon\New silentmoon"
+hugo --minify
 Compress-Archive -Path public\* -DestinationPath silentmoon-blog.zip
 ```
 
-## 2. 宝塔面板操作
+### 2. 宝塔上传
 
-### 2.1 上传文件
+1. 宝塔面板 → **文件** → 进入 `/www/wwwroot/silentmoon-blog/`
+2. 上传 `silentmoon-blog.zip` → 右键解压到当前目录
+3. 确认 `index.html` 在根目录下
 
-1. 打开宝塔面板 → **文件**
-2. 进入 `/www/wwwroot/`，新建目录 `silentmoon-blog`
-3. 点击 **上传**，选择 `silentmoon-blog.zip`
-4. 上传完成后右键 zip → **解压** 到当前目录
-5. 解压后确认 `index.html` 直接在 `/www/wwwroot/silentmoon-blog/` 下（不是 `/www/wwwroot/silentmoon-blog/public/`）
+### 步骤 3-4 看下面「宝塔站点配置」即可，以后每次更新重复步骤 1-2 覆盖上传。
 
-### 2.2 添加站点
+---
+
+## 方案 B：服务器 Git + Hugo 自动构建（推荐）
+
+一次配置，以后本地 push 完服务器自动更新。
+
+### B1. SSH 连上服务器
+
+```bash
+ssh root@你的服务器IP
+```
+
+### B2. 安装 Hugo Extended
+
+宝塔面板 → **终端**，粘贴运行：
+
+```bash
+# 下载 Hugo（AMD64 架构）
+cd /tmp
+wget https://github.com/gohugoio/hugo/releases/download/v0.163.1/hugo_extended_0.163.1_linux-amd64.tar.gz
+tar -xzf hugo_extended_0.163.1_linux-amd64.tar.gz
+mv hugo /usr/local/bin/hugo
+
+# 验证
+hugo version
+# 输出：hugo v0.163.1+extended linux/amd64 ...
+```
+
+> ARM 服务器（如树莓派、某些云服务器）把 `amd64` 换成 `arm64`。
+
+### B3. 克隆仓库
+
+```bash
+cd /www/wwwroot
+
+# 删除宝塔默认建的目录（如果有）
+rm -rf silentmoon-blog
+
+# 克隆
+git clone https://github.com/mistymoonz/silentmoon-blog.git
+cd silentmoon-blog
+
+# 构建
+hugo --minify -d .
+```
+
+构建完检查：`ls index.html` 能看到文件就对了。
+
+### B4. 宝塔站点配置
 
 1. 宝塔面板 → **网站** → **添加站点**
 2. 填写：
-   - **域名**：你的域名（如 `silentmoon.top`），没有域名填服务器 IP
-   - **根目录**：选择 `/www/wwwroot/silentmoon-blog`
-   - **PHP 版本**：选择 **纯静态**（不需要 PHP）
+   - **域名**：你的域名（如 `silentmoon.top`）
+   - **根目录**：`/www/wwwroot/silentmoon-blog`
+   - **PHP 版本**：选择 **纯静态**
 3. 点击 **提交**
 
-### 2.3 配置 SSL（可选）
+### B5. SSL 证书
 
 1. 网站列表 → 点击域名 → **SSL**
 2. 选择 **Let's Encrypt** → **申请证书**
 3. 勾选 **强制 HTTPS** → 保存
 
-## 3. 配置伪静态（URL 重写）
+### B6. 伪静态
 
-网站 → 点击域名 → **伪静态**，粘贴以下内容：
+网站 → 点击域名 → **伪静态**，粘贴：
 
 ```nginx
-# Nginx（宝塔默认）
 location / {
     try_files $uri $uri/ =404;
 }
-
-# 404 页面
 error_page 404 /404.html;
 
-# 静态资源缓存 30 天
 location ~* \.(css|js|jpg|jpeg|png|gif|ico|webp|svg|woff|woff2)$ {
     expires 30d;
     add_header Cache-Control "public, immutable";
 }
 
-# 禁止访问隐藏文件
 location ~ /\. {
     deny all;
 }
 ```
 
-保存。
+### B7. 设置 Git 自动拉取（免密）
 
-## 4. 测试
+```bash
+# 生成 SSH 密钥
+ssh-keygen -t ed25519 -C "blog-deploy" -N "" -f ~/.ssh/id_ed25519
+
+# 查看公钥
+cat ~/.ssh/id_ed25519.pub
+```
+
+复制输出的公钥，到 **GitHub → Settings → Deploy keys → Add deploy key**，粘贴，勾选 **Allow write access**。
+
+然后改成 SSH 拉取：
+
+```bash
+cd /www/wwwroot/silentmoon-blog
+git remote set-url origin git@github.com:mistymoonz/silentmoon-blog.git
+```
+
+### B8. 宝塔计划任务（自动更新）
+
+宝塔面板 → **计划任务** → **添加任务**：
+
+| 字段 | 值 |
+|------|-----|
+| 任务名称 | 自动更新博客 |
+| 任务类型 | Shell 脚本 |
+| 执行周期 | 每 5 分钟 |
+| 脚本内容 | 见下方 |
+
+```bash
+#!/bin/bash
+cd /www/wwwroot/silentmoon-blog
+
+# 拉取最新代码
+git pull origin main 2>&1 | grep -v "Already up to date" || exit 0
+
+# 有新代码才构建
+/usr/local/bin/hugo --minify -d .
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Blog updated successfully"
+```
+
+保存后点 **执行** 测试一下，看日志输出是否正常。
+
+---
+
+## 测试
 
 浏览器打开你的域名，检查：
+
 - 首页 Hero 显示背景图和标题
-- 导航栏和暗色模式正常
-- `/posts/` `/about/` `/friends/` 页面可访问
-- 标签筛选功能正常
+- 导航栏、暗色模式正常
+- `/posts/`、`/about/`、`/friends/` 可访问
+- 标签筛选正常
 
-## 5. 后续更新
+## 日常使用
 
-每次改完内容后：
+### 方案 A（手动上传）
 
-```bash
-# 本地构建
-hugo --minify
+写完文章 → 本地 `hugo --minify` → 压缩 `public/` → 宝塔上传解压
 
-# 压缩
-Compress-Archive -Path public\* -DestinationPath silentmoon-blog.zip
+### 方案 B（自动部署）✅
 
-# 宝塔面板 → 文件 → 上传 zip → 解压覆盖
-```
-
-如果文章改得频繁，也可以直接在服务器上装 Hugo，用 Git 拉代码构建：
-
-```bash
-# 服务器上
-cd /www/wwwroot/silentmoon-blog
-git pull
-hugo --minify -d .
-```
+本地写好文章 → push 到 GitHub → 最多等 5 分钟，服务器自动拉取构建上线。也可以手动到宝塔计划任务点 **执行** 立即更新。
