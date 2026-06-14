@@ -78,23 +78,28 @@ git config --global user.name "Mistymoon"
 git config --global user.email "mistymoon555@outlook.com"
 ```
 
-### B3. 克隆仓库
+### B3. 克隆仓库并构建
+
+项目源码放在 `/opt/` 下（不对外暴露），构建产物输出到网站根目录。
 
 ```bash
-cd /www/wwwroot
+# 创建源码目录
+mkdir -p /opt && cd /opt
 
-# 删除宝塔默认建的目录（如果有）
-rm -rf silentmoon.top
+# 克隆 Hugo 项目
+git clone https://github.com/mistymoonz/silentmoon-blog.git
+cd silentmoon-blog
 
-# 克隆
-git clone https://github.com/mistymoonz/silentmoon-blog.git silentmoon.top
-cd silentmoon.top
-
-# 构建
-hugo --minify -d .
+# 构建到网站根目录（只输出 public 内容）
+hugo --minify -d /www/wwwroot/silentmoon.top
 ```
 
-构建完检查：`ls index.html` 能看到文件就对了。
+构建完检查：
+
+```bash
+ls /www/wwwroot/silentmoon.top/index.html   # 应该有这个文件
+ls /www/wwwroot/silentmoon.top/hugo.toml    # 不应该有这个，源码不会泄露
+```
 
 ### B4. 宝塔站点配置
 
@@ -146,7 +151,7 @@ cat ~/.ssh/id_ed25519.pub
 然后改成 SSH 拉取：
 
 ```bash
-cd /www/wwwroot/silentmoon.top
+cd /opt/silentmoon-blog
 git remote set-url origin git@github.com:mistymoonz/silentmoon-blog.git
 ```
 
@@ -163,13 +168,13 @@ git remote set-url origin git@github.com:mistymoonz/silentmoon-blog.git
 
 ```bash
 #!/bin/bash
-cd /www/wwwroot/silentmoon.top
+cd /opt/silentmoon-blog
 
 # 拉取最新代码
 git pull origin main 2>&1 | grep -v "Already up to date" || exit 0
 
-# 有新代码才构建
-/usr/local/bin/hugo --minify -d .
+# 有新代码才构建到网站根目录
+/usr/local/bin/hugo --minify -d /www/wwwroot/silentmoon.top
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] Blog updated successfully"
 ```
 
