@@ -1,0 +1,62 @@
+# Congo 主题参数配置
+# 基于设计书 §5 页面结构设计
+# 参考: https://jpanther.github.io/congo/docs/configuration/
+
+# 配色方案 — 自定义紫蓝系
+colorScheme = "custom"
+
+# 外观模式
+defaultAppearance = "light"
+autoSwitchAppearance = true
+
+# 功能开关
+enableSearch = false
+enableCodeCopy = true
+enableImageLazyLoading = true
+enableImageWebp = true
+
+fingerprintAlgorithm = "sha256"
+
+# 头部
+[header]
+  layout = "basic"
+  showTitle = true
+
+# 页脚
+[footer]
+  showCopyright = true
+  showThemeAttribution = false
+  showAppearanceSwitcher = true
+  showScrollToTop = true
+
+# 主页
+[homepage]
+  layout = "custom"
+  showRecent = false
+  showRecentItems = 0
+
+# 文章列表
+[article]
+  showDate = true
+  showDateUpdated = false
+  showAuthor = false
+  showBreadcrumbs = true
+  showDraftLabel = true
+  showEdit = false
+  showPagination = true
+  showReadingTime = true
+  showWordCount = false
+  showTaxonomies = true
+  showTableOfContents = false
+
+# 列表页
+[list]
+  showBreadcrumbs = true
+  showSummary = true
+  showTableOfContents = false
+  groupByYear = false
+
+# 分类页
+[taxonomy]
+  showTermCount = true
+  showBreadcrumbs = true

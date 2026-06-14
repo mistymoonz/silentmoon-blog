@@ -1,0 +1,10 @@
+# Markdown 渲染配置
+
+[goldmark]
+  [goldmark.renderer]
+    unsafe = true  # 允许 HTML 内嵌
+
+[highlight]
+  noClasses = false
+  style = "dracula"
+  tabWidth = 4

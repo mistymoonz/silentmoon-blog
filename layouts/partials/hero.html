@@ -1,0 +1,28 @@
+<!-- Hero 英雄区 — 内容取自首页 _index.md -->
+{{ $heroImage := resources.Get "img/bgpic.png" }}
+{{ if $heroImage }}{{ $heroImage = $heroImage.Resize "1920x webp q85" }}{{ end }}
+{{ $home := .Site.GetPage "/" }}
+{{ $title := $home.Title | default .Site.Title }}
+<section class="hero-section" id="top"{{ with $heroImage }} style="background-image: url('{{ .RelPermalink }}');"{{ end }}>
+  <div class="hero-overlay"></div>
+  <div class="hero-glow hero-glow-1"></div>
+  <div class="hero-glow hero-glow-2"></div>
+
+  <div class="hero-content">
+    <div class="hero-accent"></div>
+    <h1 class="hero-title">
+      <span data-type="{{ $title }}">{{ $title }}</span>
+    </h1>
+    {{ with $home.Description }}
+      <p class="hero-subtitle">{{ . }}</p>
+    {{ end }}
+    <a href="#posts" class="hero-btn">
+      <span>博客文章</span>
+      <svg class="hero-btn-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+      </svg>
+    </a>
+  </div>
+
+  <div class="hero-fade"></div>
+</section>

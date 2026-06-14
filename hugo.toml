@@ -1,0 +1,36 @@
+# Hugo 主配置
+# 站点基础设置
+baseURL = "https://silentmoon.top/"
+defaultContentLanguage = "zh-CN"
+title = "Silentmoon"
+theme = "congo"
+
+# 构建选项
+enableRobotsTXT = true
+enableGitInfo = false
+summaryLength = 30
+
+# 分页
+[pagination]
+  pagerSize = 9
+
+# 输出格式
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+# 隐私设置
+[privacy]
+  [privacy.vimeo]
+    enableDNT = true
+  [privacy.x]
+    enableDNT = true
+  [privacy.youTube]
+    privacyEnhanced = true
+
+[services]
+  [services.x]
+    disableInlineCSS = true
+
+# 禁用默认分类法和对应页面生成
+# 仅禁用 taxonomy/term（标签页、分类页），保留 section（博客列表等）
+disableKinds = ["taxonomy", "term"]

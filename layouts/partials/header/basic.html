@@ -1,0 +1,69 @@
+<!-- 覆盖 Congo header — 首页悬浮半透明，其他页正常 -->
+<header class="site-header{{ if .IsHome }} header-overlay{{ end }} print:hidden">
+  <nav class="header-nav">
+    {{/* Site logo/title */}}
+    <div class="header-brand">
+      {{ partial "logo.html" . }}
+    </div>
+    {{/* Main menu */}}
+    {{ if or .Site.Menus.main (.Site.Params.enableSearch | default false) }}
+      <ul class="header-menu">
+        {{ if .Site.Menus.main }}
+          {{ range .Site.Menus.main }}
+            {{ if and (eq .Params.action "locale") (or (not page.IsTranslated) (not hugo.IsMultilingual)) }}
+              {{ continue }}
+            {{ end }}
+            <li class="header-menu-item">
+              {{ if eq .Params.action "search" }}
+                {{ $.Scratch.Add "searchCount" 1 }}
+                {{ if $.Site.Params.enableSearch | default false }}
+                  <button
+                    id="search-button-{{ $.Scratch.Get "searchCount" }}"
+                    title="{{ .Title | default (i18n "search.open_button_title") }}"
+                    class="header-link"
+                  >
+                    {{ with .Params.icon | default "search" }}
+                      <span class="header-icon">
+                        {{- partial "icon.html" . -}}
+                      </span>
+                    {{- end -}}{{- if .Params.showName | default true -}}
+                      <span class="header-link-text">{{ .Name | markdownify | emojify }}</span>
+                    {{ end }}
+                  </button>
+                {{ end }}
+              {{ else if eq .Params.action "appearance" }}
+                {{ $.Scratch.Add "switchCount" 1 }}
+                <button
+                  id="appearance-switcher-{{ $.Scratch.Get "switchCount" }}"
+                  type="button"
+                  aria-label="appearance switcher"
+                  class="header-link"
+                >
+                  <span class="header-icon dark:hidden" title="{{ i18n "footer.dark_appearance" }}">
+                    {{ with .Params.icon | default "moon" }}{{ partial "icon.html" . }}{{ end }}
+                  </span>
+                  <span class="header-icon hidden dark:inline" title="{{ i18n "footer.light_appearance" }}">
+                    {{ with .Params.icon | default "sun" }}{{ partial "icon.html" . }}{{ end }}
+                  </span>
+                </button>
+              {{ else if eq .Params.action "locale" }}
+                {{ $.Scratch.Add "localeCount" 1 }}
+                {{ partial "translations.html" (dict "ctx" . "dir" "up") }}
+              {{ else }}
+                <a href="{{ .URL }}" title="{{ .Title }}" class="header-link"
+                  {{ with .Params.rel }}rel="{{ . }}"{{ end }}
+                  {{ with .Params.target }}target="{{ . }}"{{ end }}>
+                  {{ with .Params.icon }}
+                    <span class="header-icon">{{- partial "icon.html" . -}}</span>
+                  {{- end -}}{{- if .Params.showName | default true -}}
+                    <span class="header-link-text">{{ .Name | markdownify | emojify }}</span>
+                  {{ end }}
+                </a>
+              {{ end }}
+            </li>
+          {{ end }}
+        {{ end }}
+      </ul>
+    {{ end }}
+  </nav>
+</header>

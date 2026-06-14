@@ -1,0 +1,31 @@
+<!-- 首页自定义布局：Hero + 博客卡片网格 -->
+{{ partial "hero.html" . }}
+
+<!-- 博客文章区 -->
+<section id="posts" class="blog-section">
+  <div class="blog-container">
+    <h2 class="section-title">
+      <span class="section-title-text">最新文章</span>
+      <span class="section-title-line"></span>
+    </h2>
+
+    <div class="card-grid">
+      {{ $pages := where .Site.RegularPages "Type" "posts" }}
+      {{ range first 6 $pages }}
+        {{ partial "article-card.html" . }}
+      {{ end }}
+    </div>
+
+    {{ $postCount := len (where .Site.RegularPages "Type" "posts") }}
+    {{ if gt $postCount 6 }}
+    <div class="view-all-wrapper">
+      <a href="/posts/" class="view-all-btn">
+        浏览全部文章
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+        </svg>
+      </a>
+    </div>
+    {{ end }}
+  </div>
+</section>

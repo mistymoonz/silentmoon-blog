@@ -1,0 +1,7 @@
+public/
+_site/
+.hugo_build.lock
+hugo_stats.json
+node_modules/
+.DS_Store
+Thumbs.db

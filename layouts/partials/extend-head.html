@@ -1,0 +1,50 @@
+<!-- 自定义头部注入 -->
+<!-- 中文字体优化 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
+
+<!-- SEO meta -->
+<meta name="author" content="静月">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+<!-- 首页导航栏滚动毛玻璃效果 + 标题打字动画 -->
+{{ if .IsHome }}
+<script>
+  (function() {
+    var header = document.querySelector('.header-overlay');
+    if (!header) return;
+    function onScroll() {
+      if (window.scrollY > 60) {
+        header.classList.add('header-scrolled');
+      } else {
+        header.classList.remove('header-scrolled');
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var lines = document.querySelectorAll('[data-type]');
+    if (!lines.length) return;
+    var speed = 120;
+
+    // 所有行同时打字
+    lines.forEach(function(el) {
+      var text = el.getAttribute('data-type');
+      el.textContent = '';
+      el.classList.add('typing');
+      var i = 0;
+      var timer = setInterval(function() {
+        el.textContent += text.charAt(i);
+        i++;
+        if (i >= text.length) {
+          clearInterval(timer);
+          el.classList.remove('typing');
+        }
+      }, speed);
+    });
+  });
+</script>
+{{ end }}

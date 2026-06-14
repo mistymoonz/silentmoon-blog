@@ -1,0 +1,32 @@
+<!-- 博客文章卡片 — 精致排版 -->
+<article class="article-card" data-tags="{{ range $i, $t := .Params.tags }}{{ if $i }},{{ end }}{{ $t }}{{ end }}">
+  <!-- 顶部色条 -->
+  <div class="article-card-accent"></div>
+
+  <!-- 卡片内容 -->
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      {{ with .Params.category }}
+      <span class="article-card-category">{{ . }}</span>
+      {{ end }}
+      <time class="article-card-date" datetime="{{ .Date.Format "2006-01-02" }}">
+        {{ .Date.Format "2006 年 01 月 02 日" }}
+      </time>
+    </div>
+
+    <h3 class="article-card-title">
+      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+    </h3>
+
+    {{ with .Summary }}
+    <p class="article-card-summary">{{ . | plainify | truncate 120 }}</p>
+    {{ end }}
+
+    <a href="{{ .RelPermalink }}" class="article-card-link">
+      阅读全文
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+      </svg>
+    </a>
+  </div>
+</article>
