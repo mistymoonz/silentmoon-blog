@@ -20,13 +20,13 @@ git add -A && git commit -m "update" && git push
 ```powershell
 cd "e:\Program Develop\silentmoon\New silentmoon"
 hugo --minify
-Compress-Archive -Path public\* -DestinationPath silentmoon-blog.zip
+Compress-Archive -Path public\* -DestinationPath silentmoon.top.zip
 ```
 
 ### 2. 宝塔上传
 
-1. 宝塔面板 → **文件** → 进入 `/www/wwwroot/silentmoon-blog/`
-2. 上传 `silentmoon-blog.zip` → 右键解压到当前目录
+1. 宝塔面板 → **文件** → 进入 `/www/wwwroot/silentmoon.top/`
+2. 上传 `silentmoon.top.zip` → 右键解压到当前目录
 3. 确认 `index.html` 在根目录下
 
 ### 步骤 3-4 看下面「宝塔站点配置」即可，以后每次更新重复步骤 1-2 覆盖上传。
@@ -61,17 +61,34 @@ hugo version
 
 > ARM 服务器（如树莓派、某些云服务器）把 `amd64` 换成 `arm64`。
 
+### B2.5 安装 Git（如果没有）
+
+```bash
+# 检查是否已装
+git --version
+
+# CentOS / RHEL
+yum install -y git
+
+# Ubuntu / Debian
+apt install -y git
+
+# 配置（替换为你的信息）
+git config --global user.name "Mistymoon"
+git config --global user.email "mistymoon555@outlook.com"
+```
+
 ### B3. 克隆仓库
 
 ```bash
 cd /www/wwwroot
 
 # 删除宝塔默认建的目录（如果有）
-rm -rf silentmoon-blog
+rm -rf silentmoon.top
 
 # 克隆
-git clone https://github.com/mistymoonz/silentmoon-blog.git
-cd silentmoon-blog
+git clone https://github.com/mistymoonz/silentmoon-blog.git silentmoon.top
+cd silentmoon.top
 
 # 构建
 hugo --minify -d .
@@ -84,7 +101,7 @@ hugo --minify -d .
 1. 宝塔面板 → **网站** → **添加站点**
 2. 填写：
    - **域名**：你的域名（如 `silentmoon.top`）
-   - **根目录**：`/www/wwwroot/silentmoon-blog`
+   - **根目录**：`/www/wwwroot/silentmoon.top`
    - **PHP 版本**：选择 **纯静态**
 3. 点击 **提交**
 
@@ -129,7 +146,7 @@ cat ~/.ssh/id_ed25519.pub
 然后改成 SSH 拉取：
 
 ```bash
-cd /www/wwwroot/silentmoon-blog
+cd /www/wwwroot/silentmoon.top
 git remote set-url origin git@github.com:mistymoonz/silentmoon-blog.git
 ```
 
@@ -146,7 +163,7 @@ git remote set-url origin git@github.com:mistymoonz/silentmoon-blog.git
 
 ```bash
 #!/bin/bash
-cd /www/wwwroot/silentmoon-blog
+cd /www/wwwroot/silentmoon.top
 
 # 拉取最新代码
 git pull origin main 2>&1 | grep -v "Already up to date" || exit 0
