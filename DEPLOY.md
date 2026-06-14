@@ -43,37 +43,45 @@ Compress-Archive -Path public\* -DestinationPath silentmoon.top.zip
 ssh root@你的服务器IP
 ```
 
-### B2. 安装 Hugo Extended
+### B2. 安装 Hugo Extended（镜像加速）
 
 宝塔面板 → **终端**，粘贴运行：
 
 ```bash
-# 下载 Hugo（AMD64 架构）
 cd /tmp
-wget https://github.com/gohugoio/hugo/releases/download/v0.163.1/hugo_extended_0.163.1_linux-amd64.tar.gz
+
+# 优先用 ghproxy 镜像，GitHub 直接下载做备选
+wget https://ghproxy.net/https://github.com/gohugoio/hugo/releases/download/v0.163.1/hugo_extended_0.163.1_linux-amd64.tar.gz \
+  || wget https://mirror.ghproxy.com/https://github.com/gohugoio/hugo/releases/download/v0.163.1/hugo_extended_0.163.1_linux-amd64.tar.gz \
+  || wget https://github.com/gohugoio/hugo/releases/download/v0.163.1/hugo_extended_0.163.1_linux-amd64.tar.gz
+
 tar -xzf hugo_extended_0.163.1_linux-amd64.tar.gz
 mv hugo /usr/local/bin/hugo
 
 # 验证
 hugo version
-# 输出：hugo v0.163.1+extended linux/amd64 ...
 ```
 
-> ARM 服务器（如树莓派、某些云服务器）把 `amd64` 换成 `arm64`。
+> ARM 服务器把 `amd64` 换成 `arm64`。
 
-### B2.5 安装 Git（如果没有）
+### B2.5 安装 Git（镜像加速）
 
 ```bash
 # 检查是否已装
-git --version
+git --version && echo "已安装，跳过" && return
 
-# CentOS / RHEL
+# ---------- CentOS / RHEL ----------
+# 换阿里云镜像源
+sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*.repo 2>/dev/null
+sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://mirrors.aliyun.com|g' /etc/yum.repos.d/CentOS-*.repo 2>/dev/null
 yum install -y git
 
-# Ubuntu / Debian
-apt install -y git
+# ---------- Ubuntu / Debian ----------
+# 换清华镜像源（以 Ubuntu 22.04 为例）
+sed -i 's|http://archive.ubuntu.com|http://mirrors.tuna.tsinghua.edu.cn|g' /etc/apt/sources.list 2>/dev/null
+apt update && apt install -y git
 
-# 配置（替换为你的信息）
+# ---------- 通用配置 ----------
 git config --global user.name "Mistymoon"
 git config --global user.email "mistymoon555@outlook.com"
 ```
