@@ -2,6 +2,10 @@ public/
 _site/
 .hugo_build.lock
 hugo_stats.json
+resources/
 node_modules/
 .DS_Store
 Thumbs.db
+public.zip
+.claude/settings.local.json
+设计书-静月博客前端重写.md
