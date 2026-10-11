@@ -1,6 +1,7 @@
 ---
 title: "友情链接"
 description: "一些有趣的朋友和站点"
+wallpaper: true
 ---
 
 <div class="friends-grid">
@@ -20,7 +21,7 @@ description: "一些有趣的朋友和站点"
   <span class="friend-desc">简洁、轻量且功能丰富的 Hugo 博客主题。</span>
 </a>
 
-<a href="https://github.com/mistymoonz/Ark-match-WebDemo" target="_blank" rel="noopener" class="friend-card">
+<a href="https://arkmatch.silentmoon.top/" target="_blank" rel="noopener" class="friend-card">
   <span class="friend-name">ArkMatch</span>
   <span class="friend-desc">开发中！</span>
 </a>

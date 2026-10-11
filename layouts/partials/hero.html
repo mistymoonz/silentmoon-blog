@@ -1,9 +1,34 @@
-<!-- Hero 英雄区 — 内容取自首页 _index.md -->
-{{ $heroImage := resources.Get "img/bgpic.png" }}
-{{ if $heroImage }}{{ $heroImage = $heroImage.Resize "1920x webp q85" }}{{ end }}
+{{/* Hero 英雄区 — 内容取自首页 _index.md
+     背景图走 <picture> + srcset：AVIF 优先，WebP 回落。
+     原先用 CSS background-image，浏览器无法按视口选图，
+     手机也会下载完整 1920px（304KB）。 */}}
+{{ $hero := resources.Get "img/bgpic.png" }}
 {{ $home := .Site.GetPage "/" }}
 {{ $title := $home.Title | default .Site.Title }}
-<section class="hero-section" id="top"{{ with $heroImage }} style="background-image: url('{{ .RelPermalink }}');"{{ end }}>
+<section class="hero-section" id="top">
+  {{ with $hero }}
+    {{ $avif640 := .Resize "640x avif q60" }}
+    {{ $avif1280 := .Resize "1280x avif q60" }}
+    {{ $avif1920 := .Resize "1920x avif q60" }}
+    {{ $webp1920 := .Resize "1920x webp q80" }}
+    <picture class="hero-media">
+      <source
+        type="image/avif"
+        srcset="{{ $avif640.RelPermalink }} 640w, {{ $avif1280.RelPermalink }} 1280w, {{ $avif1920.RelPermalink }} 1920w"
+        sizes="100vw"
+      />
+      <img
+        class="hero-img"
+        src="{{ $webp1920.RelPermalink }}"
+        width="{{ $webp1920.Width }}"
+        height="{{ $webp1920.Height }}"
+        alt=""
+        fetchpriority="high"
+        decoding="async"
+      />
+    </picture>
+  {{ end }}
+
   <div class="hero-overlay"></div>
   <div class="hero-glow hero-glow-1"></div>
   <div class="hero-glow hero-glow-2"></div>
@@ -13,15 +38,36 @@
     <h1 class="hero-title">
       <span data-type="{{ $title }}">{{ $title }}</span>
     </h1>
-    {{ with $home.Description }}
-      <p class="hero-subtitle">{{ . }}</p>
+
+    {{/* 名片行：身份标签，内容取自 content/_index.md 的 profile */}}
+    {{ with $home.Params.profile }}
+      <div class="hero-namecard">
+        {{ with .tags }}
+          <div class="hero-tags">
+            {{ range . }}<span class="hero-tag">{{ . }}</span>{{ end }}
+          </div>
+        {{ end }}
+      </div>
     {{ end }}
-    <a href="#posts" class="hero-btn">
-      <span>博客文章</span>
-      <svg class="hero-btn-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
-      </svg>
-    </a>
+
+    {{/* 快捷入口：data/hub.toml 中 hero = true 的链接 */}}
+    {{ with where hugo.Data.hub.links "hero" true }}
+      <div class="hero-socials">
+        {{ range . }}
+          <a
+            class="hero-social"
+            href="{{ .url }}"
+            title="{{ .name }}"
+            aria-label="{{ .name }}"
+            {{- if hasPrefix .url "http" }}
+              target="_blank" rel="noopener"
+            {{- end }}
+          >
+            {{ partial "hub-icon.html" (dict "icon" .icon "class" "hero-social-icon") }}
+          </a>
+        {{ end }}
+      </div>
+    {{ end }}
   </div>
 
   <div class="hero-fade"></div>

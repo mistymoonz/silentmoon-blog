@@ -10,8 +10,9 @@
 >
   {{- partial "head.html" . -}}
   <body
-    class="flex flex-col bg-neutral text-lg leading-7 text-neutral-900 dark:bg-neutral-800 dark:text-neutral"
+    class="flex flex-col bg-neutral text-lg leading-7 text-neutral-900 dark:bg-neutral-800 dark:text-neutral{{ if .Params.wallpaper }} page-wallpaper{{ end }}"
   >
+    {{ if .Params.wallpaper }}{{ partial "page-wallpaper.html" . }}{{ end }}
     <div id="the-top" class="absolute flex self-center">
       <a
         class="-translate-y-8 rounded-b-lg bg-primary-200 px-3 py-1 text-sm focus:translate-y-0 dark:bg-neutral-600"

@@ -188,6 +188,25 @@ echo "[$(date '+%Y-%m-%d %H:%M:%S')] Blog updated successfully"
 
 保存后点 **执行** 测试一下，看日志输出是否正常。
 
+### B9. 备案信息（脱敏）
+
+备案号不入公开仓库：`config/production/params.toml`（已在 .gitignore 中排除）承载备案参数，页脚读取后渲染；**没有该文件时页脚自动不显示备案区块，构建不受影响**。
+
+新环境部署时在项目根目录重建该文件（值见线上页脚或本地存档）：
+
+```bash
+mkdir -p config/production config/development
+cat > config/production/params.toml <<'EOF'
+[params]
+  beianPolice = "公网安备号（含「鄂公网安备」前缀）"
+  beianPoliceCode = "公网安备号纯数字部分"
+  beianIcp = "ICP 备案号"
+EOF
+cp config/production/params.toml config/development/params.toml   # 本地 hugo server 预览也显示备案
+```
+
+git pull 不会覆盖该文件（未跟踪）。
+
 ---
 
 ## 测试

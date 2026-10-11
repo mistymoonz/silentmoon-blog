@@ -1,39 +1,22 @@
 ---
 title: "关于本站"
 description: "了解静月博客和作者"
+wallpaper: true
 ---
 
+<!-- 个人简介卡：暂时注释，写好内容后取消注释即可
 <div class="about-grid">
 
 <div class="about-card">
   <div class="about-card-icon">
-    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
   </div>
-  <h3>博客主题</h3>
-  <ul>
-    <li><strong>编程学习</strong>：从前端到后端，从入门到进阶的技术笔记</li>
-    <li><strong>我去！二次元</strong>：看看动漫真是人生一大幸事</li>
-    <li><strong>一些碎碎念</strong>：对技术趋势和社会现象的思考</li>
-  </ul>
-</div>
-
-<div class="about-card">
-  <div class="about-card-icon">
-    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-  </div>
-  <h3>技术栈</h3>
-  <ul>
-    <li><strong>静态站点生成器</strong>：<a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> — Go 语言驱动的极速构建</li>
-    <li><strong>部署</strong>：纯静态 HTML，Nginx/Caddy 服务</li>
-    <li><strong>服务器</strong>：2C2G 云服务器 + 宝塔面板</li>
-  </ul>
-  <blockquote>
-    <p>Q：为什么是纯静态？</p>
-    <p>A：孩子揭不开锅了，只有2核2g的服务器能用，至于托管，我懒。</p>
-  </blockquote>
+  <h3>个人简介</h3>
+  <p>待补充。</p>
 </div>
 
 </div>
+-->
 
 <div class="about-quote-full">
   <h3>作者碎碎念</h3>

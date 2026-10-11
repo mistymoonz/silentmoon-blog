@@ -7,7 +7,12 @@
    1. 全局
    -------------------------------------------------------------------------- */
 body {
-  font-family: "Noto Serif SC", "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  /* 系统 CJK 字体栈：0 字节、0 请求。
+     原先首位是 Google Fonts 的 Noto Serif SC（render-blocking 外链），
+     本站部署在中国大陆，fonts.googleapis.com 可达性不稳定会阻塞首屏。 */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Source Han Sans SC",
+    "Noto Sans CJK SC", "Helvetica Neue", Arial, sans-serif;
   font-size: 1.15rem;
   min-height: 100vh;
   display: flex;
@@ -130,6 +135,11 @@ html { scroll-behavior: smooth; }
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+/* 非首页导航是深色底，站名（logo.html 渲染的标题链接）强制白色 */
+.site-header:not(.header-overlay) .header-brand a {
+  color: #ffffff;
 }
 
 .header-menu {
@@ -340,10 +350,24 @@ html { scroll-behavior: smooth; }
   justify-content: center;
   min-height: 100vh;
   overflow: hidden;
+  /* 图片加载期间的占位底色，避免白屏闪烁 */
   background-color: #0f0c29;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+}
+
+/* 背景图改为真实 <img>（见 layouts/partials/hero.html），
+   以便用 srcset 按视口选图；绝对定位铺满，层级在光晕之下。 */
+.hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .hero-overlay {
@@ -478,13 +502,16 @@ html { scroll-behavior: smooth; }
 .hero-subtitle {
   font-size: 1.35rem;
   color: rgba(255, 255, 255, 0.65);
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.25rem;
   max-width: 42rem;
   margin-left: auto;
   margin-right: auto;
   line-height: 1.8;
   font-weight: 300;
   letter-spacing: 0.03em;
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.6),
+    0 2px 14px rgba(0, 0, 0, 0.45);
 }
 
 /* 按钮 */
@@ -492,7 +519,7 @@ html { scroll-behavior: smooth; }
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 4rem;
+  margin-top: 2.25rem;
   padding: 0.85rem 2.25rem;
   color: #ffffff;
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3));
@@ -524,39 +551,24 @@ html { scroll-behavior: smooth; }
   transform: translateY(2px);
 }
 
-/* 底部渐隐过渡 */
+/* 底部渐隐过渡 — 融入页脚深色 */
 .hero-fade {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   height: 120px;
-  background: linear-gradient(to top, #f8f9fa 0%, transparent 100%);
+  background: linear-gradient(to top, #1a1a2e 0%, transparent 100%);
   z-index: 5;
 }
 
 .dark .hero-fade {
-  background: linear-gradient(to top, rgb(23, 23, 23) 0%, transparent 100%);
+  background: linear-gradient(to top, rgb(15, 15, 20) 0%, transparent 100%);
 }
 
 /* ==========================================================================
-   3. 博客文章区（首页）
+   3. 通用区块与卡片网格
    ========================================================================== */
-.blog-section {
-  padding: 5rem 0 6rem;
-  background-color: #f8f9fa;
-}
-
-.dark .blog-section {
-  background-color: rgb(23, 23, 23);
-}
-
-.blog-container {
-  max-width: 68rem;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
-
 /* 区域标题 */
 .section-title {
   display: flex;
@@ -588,7 +600,7 @@ html { scroll-behavior: smooth; }
 /* 卡片网格 */
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
 }
 
@@ -835,8 +847,8 @@ html { scroll-behavior: smooth; }
 .footer-custom {
   background: #1a1a2e;
   color: #a0a0b8;
-  padding: 3.5rem 0;
-  font-size: 1.1rem;
+  padding: 2rem 0;
+  font-size: 1rem;
 }
 
 .dark .footer-custom {
@@ -851,7 +863,7 @@ html { scroll-behavior: smooth; }
 }
 
 .footer-copyright {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #7a7a95;
 }
 
@@ -860,7 +872,7 @@ html { scroll-behavior: smooth; }
   flex-wrap: wrap;
   justify-content: center;
   gap: 1.25rem;
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #6a6a80;
 }
 
@@ -875,7 +887,7 @@ html { scroll-behavior: smooth; }
 }
 
 .footer-tech {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #505065;
 }
 
@@ -955,6 +967,11 @@ html { scroll-behavior: smooth; }
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
   margin-bottom: 2rem;
+}
+
+/* 只剩一张卡时占满整行 */
+.about-grid > .about-card:only-child {
+  grid-column: 1 / -1;
 }
 
 @media (max-width: 700px) {
@@ -1209,12 +1226,248 @@ html { scroll-behavior: smooth; }
 }
 
 /* ==========================================================================
+   6.8 首页名片行（Hero 内）
+   ========================================================================== */
+.hero-namecard {
+  text-align: center;
+  /* 用 padding 而非 margin：margin 会与 .hero-title 的下边距折叠 */
+  padding-top: 0.75rem;
+}
+
+.hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.hero-tag {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.78);
+  letter-spacing: 0.05em;
+  padding: 0.3rem 0.95rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition:
+    border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hero-tag:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* 快捷图标行 */
+.hero-socials {
+  display: flex;
+  justify-content: center;
+  gap: 0.9rem;
+  margin-top: 1.6rem;
+}
+
+.hero-social {
+  width: 2.75rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hero-social:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.45);
+  transform: translateY(-3px) scale(1.06);
+  box-shadow: 0 10px 28px rgba(102, 126, 234, 0.35);
+}
+
+.hero-social-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* ==========================================================================
+   6.9 壁纸模式（wallpaper: true 的页面）— 全屏背景 + 玻璃卡片
+   背景图与遮罩由 partials/page-wallpaper.html 注入，此处是布局与文字配色
+   ========================================================================== */
+body.page-wallpaper {
+  /* 磨砂玻璃配方：改这一组变量即可整体调档 */
+  --glass-bg: rgba(148, 153, 170, 0.16);
+  --glass-bg-strong: rgba(148, 153, 170, 0.26);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-blur: blur(20px);
+  background-color: #0f0c29; /* 图片加载前的兜底底色 */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* 页面标题与面包屑换浅色 */
+.page-wallpaper .page-container h1 {
+  color: #ffffff;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+}
+
+.page-wallpaper .page-container header ol {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.page-wallpaper .page-container header ol a {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.page-wallpaper .page-container header ol a:hover {
+  color: #ffffff;
+}
+
+/* 友链卡片：磨砂玻璃 */
+.page-wallpaper .friend-card {
+  background: var(--glass-bg);
+  border-color: var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+.page-wallpaper .friend-name {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.page-wallpaper .friend-desc {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.page-wallpaper .friend-card:hover {
+  background: var(--glass-bg-strong);
+  border-color: rgba(165, 180, 252, 0.65);
+  box-shadow: 0 10px 32px rgba(102, 126, 234, 0.35);
+}
+
+/* 导航与页脚：半透明磨砂（灰调），融入壁纸 */
+.page-wallpaper .site-header {
+  background: rgba(44, 47, 62, 0.62);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.page-wallpaper .footer-custom {
+  background: rgba(44, 47, 62, 0.62);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 关于页：信息卡片、引用块玻璃化 */
+.page-wallpaper .about-card {
+  background: var(--glass-bg);
+  border-color: var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+.page-wallpaper .about-card:hover {
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.32);
+}
+
+.page-wallpaper .about-card h3,
+.page-wallpaper .about-quote-full h3,
+.page-wallpaper .about-contact-title {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.page-wallpaper .about-card li {
+  color: rgba(255, 255, 255, 0.78);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.page-wallpaper .about-card li a {
+  color: rgb(165, 180, 252);
+}
+
+.page-wallpaper .about-card p {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.page-wallpaper .about-card blockquote,
+.page-wallpaper .about-quote-full blockquote {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-left-color: rgb(129, 140, 248);
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.page-wallpaper .about-quote-full blockquote small {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.page-wallpaper .about-card-icon {
+  color: rgb(129, 140, 248);
+}
+
+/* 关于页：联系方式卡片玻璃化（含品牌图标配色的暗底适配） */
+.page-wallpaper .contact-link {
+  background: var(--glass-bg);
+  border-color: var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+.page-wallpaper .contact-link:hover {
+  background: var(--glass-bg-strong);
+  border-color: rgba(165, 180, 252, 0.65);
+}
+
+.page-wallpaper .contact-icon {
+  color: rgb(129, 140, 248);
+}
+
+.page-wallpaper .contact-github .contact-icon {
+  color: #e0e0e0;
+}
+
+.page-wallpaper .contact-steam .contact-icon {
+  color: #90c0f0;
+}
+
+.page-wallpaper .contact-label {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.page-wallpaper .contact-value {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@media (max-width: 640px) {
+  body.page-wallpaper {
+    background-attachment: scroll;
+  }
+}
+
+/* ==========================================================================
    7. 响应式
    ========================================================================== */
 @media (min-width: 768px) {
   .hero-title { font-size: 6rem; }
   .hero-subtitle { font-size: 1.5rem; }
-  .blog-section { padding: 6rem 0 7rem; }
   .section-title-text { font-size: 2.5rem; }
   .article-card-body { padding: 2rem; }
 }
@@ -1226,12 +1479,13 @@ html { scroll-behavior: smooth; }
 @media (max-width: 640px) {
   .hero-title { font-size: 2.5rem; }
   .hero-subtitle { font-size: 1.1rem; }
+  .hero-socials { gap: 0.7rem; margin-top: 1.35rem; }
+  .hero-social { width: 2.5rem; height: 2.5rem; }
   .card-grid {
     grid-template-columns: 1fr;
     gap: 1.25rem;
   }
   .section-title-text { font-size: 1.85rem; }
-  .blog-section { padding: 3.5rem 0 4.5rem; }
   .article-card-body { padding: 1.5rem; }
   .hero-btn { padding: 0.8rem 2rem; font-size: 1rem; }
 }

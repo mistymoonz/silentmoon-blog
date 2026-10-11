@@ -10,7 +10,7 @@
 
   [zh-CN.params]
     dateFormat = "2006 年 01 月 02 日"
-    description = "Mistymoon的博客 — 代码，二次元以及碎碎念。"
+    description = "Mistymoon 的个人主页 — 代码、二次元以及碎碎念。"
 
   [zh-CN.params.author]
     name = "Mistymoon"

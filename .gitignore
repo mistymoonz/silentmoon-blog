@@ -7,5 +7,10 @@ node_modules/
 .DS_Store
 Thumbs.db
 public.zip
+silentmoon.top.zip
 .claude/settings.local.json
 设计书-静月博客前端重写.md
+
+# 备案信息（脱敏：不入公开仓库，本地/服务器各自维护）
+config/production/params.toml
+config/development/params.toml

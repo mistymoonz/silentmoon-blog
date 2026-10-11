@@ -1,6 +1,12 @@
 ---
 title: "今人不见古时月，今月曾经照古人"
-description: "Mistymoon的博客：代码，二次元以及碎碎念"
+description: "代码、二次元以及碎碎念，欢迎来玩"
+profile:
+  tags:
+    - "代码"
+    - "二次元"
+    - "舟批"
+    - "碎碎念"
 ---
 
-Mistymoon的个人博客。二次元，代码，舟批以及碎碎念。
+Mistymoon 的个人主页。代码、二次元、舟批以及碎碎念。

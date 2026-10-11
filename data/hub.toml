@@ -1,0 +1,50 @@
+# Hero 快捷图标数据（hero = true 的条目渲染在首页名片行）
+# 将来若恢复中转卡片区，本文件可直接复用；desc/cta 为卡片预留字段
+#
+# 字段说明：
+#   name  快捷图标的 title/aria-label
+#   desc  一句话描述（卡片预留）
+#   url   目标地址：http 开头自动新窗口打开，mailto 开头唤起邮件客户端
+#   icon  图标 key，可选：link / user / users / github / bilibili / steam / gamepad / mail
+#   hero  = true 时同时出现在首页 Hero 的快捷图标行
+#   cta   可选，覆盖卡片按钮文案（卡片预留）
+
+[[links]]
+name = "友链"
+desc = "一些有趣的朋友和站点"
+url = "/friends/"
+icon = "users"
+
+[[links]]
+name = "关于"
+desc = "了解 Mistymoon 和这个站"
+url = "/about/"
+icon = "user"
+
+[[links]]
+name = "GitHub"
+desc = "代码与开源项目"
+url = "https://github.com/mistymoonz"
+icon = "github"
+hero = true
+
+[[links]]
+name = "Bilibili"
+desc = "@53689136 · 视频与动态"
+url = "https://space.bilibili.com/53689136"
+icon = "bilibili"
+hero = true
+
+[[links]]
+name = "Steam"
+desc = "加个好友 1079618426"
+url = "https://steamcommunity.com/profiles/76561199039884154/"
+icon = "gamepad"
+hero = true
+
+[[links]]
+name = "邮箱"
+desc = "mistymoon555@outlook.com"
+url = "mailto:mistymoon555@outlook.com"
+icon = "mail"
+hero = true

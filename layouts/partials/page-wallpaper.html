@@ -1,0 +1,15 @@
+{{/* 全屏壁纸模式 — 主页背景图 + 半透明灰遮罩
+     由页面 front matter `wallpaper: true` 触发（baseof.html 内调用）。
+     背景图走 Hugo 图片处理拿带指纹的 URL；遮罩用一条 linear-gradient 叠在图上，
+     保证同一条 background-image 声明内分层。附属样式见 custom.css「壁纸模式」。 */}}
+{{ $hero := resources.Get "img/bgpic.png" }}
+{{ with $hero }}
+  {{ $bg := .Resize "1920x webp q80" }}
+  <style>
+    body.page-wallpaper {
+      background-image:
+        linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
+        url("{{ $bg.RelPermalink }}");
+    }
+  </style>
+{{ end }}

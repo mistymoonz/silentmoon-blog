@@ -10,13 +10,19 @@ enableRobotsTXT = true
 enableGitInfo = false
 summaryLength = 30
 
+# 禁用默认分类法和对应页面生成
+# 仅禁用 taxonomy/term（标签页、分类页），保留 section
+disableKinds = ["taxonomy", "term"]
+
 # 分页
 [pagination]
   pagerSize = 9
 
 # 输出格式
+# JSON 已移除：它是 Congo 搜索索引，但 params.toml 里 enableSearch = false，
+# 无任何消费者，属死产物（且每页 head 里还挂着一个指向它的 <link rel=alternate>）。
 [outputs]
-  home = ["HTML", "RSS", "JSON"]
+  home = ["HTML", "RSS"]
 
 # 隐私设置
 [privacy]
@@ -30,7 +36,3 @@ summaryLength = 30
 [services]
   [services.x]
     disableInlineCSS = true
-
-# 禁用默认分类法和对应页面生成
-# 仅禁用 taxonomy/term（标签页、分类页），保留 section（博客列表等）
-disableKinds = ["taxonomy", "term"]

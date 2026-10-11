@@ -1,13 +1,14 @@
-# 导航菜单 — 首页、博客、友链、关于
+# 导航菜单 — 首页、友链、关于
+# 「博客」已临时下架：文章归档于 _archive/posts/，恢复时把目录移回 content/ 并加回下方条目即可
 [[main]]
   name = "首页"
   pageRef = "/"
   weight = 10
 
-[[main]]
-  name = "博客"
-  pageRef = "/posts"
-  weight = 20
+# [[main]]
+#   name = "博客"
+#   pageRef = "/posts"
+#   weight = 20
 
 [[main]]
   name = "友链"
